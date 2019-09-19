@@ -68,8 +68,104 @@ class Game {
         if(emptySpaces){
             this.ready = false;
             this.activePlayer.activeToken.drop(emptySpaces.slice(-1)[0], () => console.log("No reset function yet"));
+            this.checkForWin(this.board.spaces,emptySpaces.slice(-1)[0]);
         } else {
             alert("Column is full");
         }
     }   
+
+    /**
+     * Method that checks if the last placed token produced a win
+     * @param {Array} allSpaces - Contains the two dimensional array of alls spaces of the board
+     * @param {Object} space - contains the space of the last played token
+     */
+    checkForWin(allSpaces, space) {
+        const spaceColumn = space.x;
+        const spaceRow = space.y;
+        const player = space.owner;
+        const spacesBelow = allSpaces[x].slice(y+1);
+        const samePlayer = 0;
+        const amountSpacesLEFT = allSpaces.length - space.x + 1;
+        const amountSpacesRIGHT = space.y;
+
+        //Check for vertical win
+        for(let i = 0; i < spacesBelow.length; i += 1) {
+            if(spacesBelow[spacesBelow.length-1 - i].owner === player){
+                samePlayer += 1;
+            } else {
+                samePlayer = 0;
+                break;
+            } 
+        }
+
+        //Check for diagonal win in top left and bottom right directions
+        for(let i = 0; i < amountSpacesLEFT;i += 1) {
+            if(allSpaces[space.x-1-i][space.y+1+i].owner === player){
+                samePlayer += 1;
+            } else {
+                break;
+            } 
+        }
+
+        for(let i = 0; i < amountSpacesRIGHT;i += 1) {
+            if(allSpaces[space.x+1+i][space.y-1-i].owner === player){
+                samePlayer += 1;
+            } else {
+                break;
+            } 
+        }
+
+        if (samePlayer >= 3) {
+            alert(`${player.name} wins!`)
+        } else {
+            samePlayer = 0;
+        }
+
+        //Check for diagonal win in top right and bottom left directions
+        for(let i = 0; i < amountSpacesLEFT;i += 1) {
+            if(allSpaces[space.x-1-i][space.y-1-i].owner === player){
+                samePlayer += 1;
+            } else {
+                break;
+            } 
+        }
+
+        for(let i = 0; i < amountSpacesRIGHT;i += 1) {
+            if(allSpaces[space.x+1+i][space.y+1+i].owner === player){
+                samePlayer += 1;
+            } else {
+                break;
+            } 
+        }
+
+        if (samePlayer >= 3) {
+            alert(`${player.name} wins!`)
+        } else {
+            samePlayer = 0;
+        }
+
+        //Checks for horizontal
+        for(let i = 0; i < amountSpacesLEFT;i += 1) {
+            if(allSpaces[space.x-1-i][space.y].owner === player){
+                samePlayer += 1;
+            } else {
+                break;
+            } 
+        }
+
+        for(let i = 0; i < amountSpacesRIGHT;i += 1) {
+            if(allSpaces[space.x+1+i][space.y].owner === player){
+                samePlayer += 1;
+            } else {
+                break;
+            } 
+        }
+
+        if (samePlayer >= 3) {
+            alert(`${player.name} wins!`)
+        } else {
+            samePlayer = 0;
+        }
+        }
+    }
 }
