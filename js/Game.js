@@ -16,4 +16,8 @@ class Game {
         players.push(new Player(name = "Player 2", color = "#e59a13", id = 2));
         return players;
     }
+
+    startGame(){
+        
+    }
 }
