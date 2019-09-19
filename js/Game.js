@@ -34,4 +34,24 @@ class Game {
     get activePlayer() {
         return this.players.find(player => player.active);
     }
+
+    /* 
+    * Receives the value of the keydown event. If one of the three arrow keys is pressed it will use methods to move the token on the screen.
+    * @arg {string} key - String value for that represents the key that is being pressed on the keyboard.
+    */
+
+    handleKeydown(key) {
+        if(this.ready) {
+            if(key === "ArrowLeft") {
+
+            } else if(key === "ArrowRight") {
+
+            } else if(key === "ArrowDown") {
+
+            } 
+
+        } else {
+            console.log("Game is not ready yet");
+        }
+    }
 }
