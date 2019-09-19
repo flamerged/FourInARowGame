@@ -43,9 +43,9 @@ class Game {
     handleKeydown(key) {
         if(this.ready) {
             if(key === "ArrowLeft") {
-
+                this.activePlayer.activeToken.moveLeft();
             } else if(key === "ArrowRight") {
-
+                this.activePlayer.activeToken.moveRight(this.board.columns);
             } else if(key === "ArrowDown") {
 
             } 
@@ -54,4 +54,6 @@ class Game {
             console.log("Game is not ready yet");
         }
     }
+
+    
 }

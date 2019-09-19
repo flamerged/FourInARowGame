@@ -5,7 +5,7 @@ class Board {
         this.spaces = this.createSpaces();
     }
 
-/* 
+    /* 
     This method generates a two dimensional array of spaces
     @return {array} spaces - A two dimensional array of space objects is returned 
      */
