@@ -21,7 +21,12 @@ class Game {
 
     }
 
+    /* 
+    Gets a Player that is active
+    @return {Player} -  Returns a Player object with the active property set to true
+    */
+
     get activePlayer() {
-        return this.players.find(player => player.active === true);
+        return this.players.find(player => player.active);
     }
 }

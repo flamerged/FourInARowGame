@@ -23,11 +23,16 @@ class Player {
         return playerToken;
     }
 
+    /* 
+    The getter method returns an array of all unused token
+    @return {Array} -  Returns an array of token objects with the dropped property set to false
+    */
+
     get unusedToken() {
-        return this.tokens.filter(token => token.dropped === false);
+        return this.tokens.filter(token => !token.dropped);
     }
 
     get activeToken() {
-        return this.unusedToken()[0];
+        return this.unusedToken[0];
     }
 }
