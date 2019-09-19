@@ -11,14 +11,19 @@ class Game {
  */
 
     createPlayers(){
-        const players = [];
-        players.push(new Player(name = "Player 1", color = "#e15258", id = 1, active = true));
-        players.push(new Player(name = "Player 2", color = "#e59a13", id = 2));
+        const players = [];
+        players.push(new Player("Player 1", 1,"#e15258", true));
+        players.push(new Player("Player 2", 2, "#e59a13", 2));
         return players;
     }
 
+    /** 
+    * Method that initializes the game. 
+    */
     startGame(){
-
+        this.board.drawHTMLBoard();
+        this.activePlayer.activeToken.drawHTMLToken();
+        this.ready = true;
     }
 
     /* 

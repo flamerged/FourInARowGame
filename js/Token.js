@@ -16,7 +16,7 @@ class Token {
         gameBoard.appendChild(divElement);
     }   
 
-    get htmlToken() {
+    get htmlToken() {
         return document.getElementById(`${this.id}`)
     }
 }

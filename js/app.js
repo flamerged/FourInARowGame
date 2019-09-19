@@ -9,6 +9,6 @@ Listens for the start button click to beginn the game
 startButton.addEventListener("click", () => {
     game.startGame()
 
-    this.style.display = 'none';
+    startButton.style.display = 'none';
     document.getElementById('play-area').style.opacity = '1';
 });
