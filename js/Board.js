@@ -21,4 +21,12 @@ class Board {
         }
         return spaces;
     }
+
+    drawHTMLBoard(){
+        for(let i = 0; i < this.spaces.length; i += 1) {
+            for(let j = 0; j < this.spaces[i].length; j += 1) {
+                this.spaces[i][j].drawSVGSpace();
+            }
+        }
+    }
 }
