@@ -35,7 +35,7 @@ class Game {
         return this.players.find(player => player.active);
     }
 
-    /* 
+    /**  
     * Receives the value of the keydown event. If one of the three arrow keys is pressed it will use methods to move the token on the screen.
     * @arg {string} key - String value for that represents the key that is being pressed on the keyboard.
     */
@@ -47,7 +47,7 @@ class Game {
             } else if(key === "ArrowRight") {
                 this.activePlayer.activeToken.moveRight(this.board.columns);
             } else if(key === "ArrowDown") {
-
+                this.playToken();
             } 
 
         } else {
@@ -55,5 +55,21 @@ class Game {
         }
     }
 
-    
+    /* 
+    * Is called when the down key is pressed. It it finds the downmost empty space in the column that the player wants to place the token 
+    and pases it together with the reset function to the drop method of the token.
+    */
+    playToken() {
+        const tokenColumn = this.activePlayer.activeToken.columnLocation;
+        const spaces = this.board.spaces[tokenColumn];
+        const emptySpaces = spaces.filter(space => space.token === null);
+        console.log(emptySpaces);
+
+        if(emptySpaces){
+            this.ready = false;
+            this.activePlayer.activeToken.drop(emptySpaces.slice(-1)[0], () => console.log("No reset function yet"));
+        } else {
+            alert("Column is full");
+        }
+    }   
 }

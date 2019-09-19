@@ -50,7 +50,7 @@ class Token {
         }
     }
 
-    /* 
+    /**  
         Method to move the token to the right on the screen.
         @arg {integer} columns - The amount of columns the board is created with. Determines the limit of the token right movement.
      */
@@ -64,7 +64,16 @@ class Token {
         }
     }
 
-    drop() {
-
+    /** 
+     * Drops html token into targeted board space.
+     * @arg   {Object}   target - Targeted space for dropped token.
+     * @arg   {function} reset  - The reset function to call after the drop animation has completed.
+     */
+    drop(target, reset) {
+        this.dropped = true;
+        
+        $(this.htmlToken).animate({
+            top: (target.y * target.diameter)
+        },750, "easeOutBounce", reset);
     }
 }
