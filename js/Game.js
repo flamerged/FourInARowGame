@@ -83,10 +83,10 @@ class Game {
         const spaceColumn = space.x;
         const spaceRow = space.y;
         const player = space.owner;
-        const spacesBelow = allSpaces[x].slice(y+1);
-        const samePlayer = 0;
-        const amountSpacesLEFT = allSpaces.length - space.x + 1;
-        const amountSpacesRIGHT = space.y;
+        const spacesBelow = allSpaces[spaceColumn].slice(spaceRow+1);
+        let samePlayer = 0;
+        const amountSpacesLEFT = allSpaces.length - spaceColumn + 1;
+        const amountSpacesRIGHT = spaceRow;
 
         //Check for vertical win
         for(let i = 0; i < spacesBelow.length; i += 1) {
@@ -100,7 +100,7 @@ class Game {
 
         //Check for diagonal win in top left and bottom right directions
         for(let i = 0; i < amountSpacesLEFT;i += 1) {
-            if(allSpaces[space.x-1-i][space.y+1+i].owner === player){
+            if(allSpaces[spaceColumn-1-i][spaceRow+1+i].owner === player){
                 samePlayer += 1;
             } else {
                 break;
@@ -108,14 +108,14 @@ class Game {
         }
 
         for(let i = 0; i < amountSpacesRIGHT;i += 1) {
-            if(allSpaces[space.x+1+i][space.y-1-i].owner === player){
+            if(allSpaces[spaceColumn+1+i][spaceRow-1-i].owner === player){
                 samePlayer += 1;
             } else {
                 break;
             } 
         }
 
-        if (samePlayer >= 3) {
+        if (samePlayer >= 3) {
             alert(`${player.name} wins!`)
         } else {
             samePlayer = 0;
@@ -123,7 +123,7 @@ class Game {
 
         //Check for diagonal win in top right and bottom left directions
         for(let i = 0; i < amountSpacesLEFT;i += 1) {
-            if(allSpaces[space.x-1-i][space.y-1-i].owner === player){
+            if(allSpaces[spaceColumn-1-i][spaceRow-1-i].owner === player){
                 samePlayer += 1;
             } else {
                 break;
@@ -131,7 +131,7 @@ class Game {
         }
 
         for(let i = 0; i < amountSpacesRIGHT;i += 1) {
-            if(allSpaces[space.x+1+i][space.y+1+i].owner === player){
+            if(allSpaces[spaceColumn+1+i][spaceRow+1+i].owner === player){
                 samePlayer += 1;
             } else {
                 break;
@@ -146,7 +146,7 @@ class Game {
 
         //Checks for horizontal
         for(let i = 0; i < amountSpacesLEFT;i += 1) {
-            if(allSpaces[space.x-1-i][space.y].owner === player){
+            if(allSpaces[spaceColumn-1-i][spaceRow].owner === player){
                 samePlayer += 1;
             } else {
                 break;
@@ -154,7 +154,7 @@ class Game {
         }
 
         for(let i = 0; i < amountSpacesRIGHT;i += 1) {
-            if(allSpaces[space.x+1+i][space.y].owner === player){
+            if(allSpaces[spaceColumn+1+i][spaceRow].owner === player){
                 samePlayer += 1;
             } else {
                 break;
@@ -166,6 +166,14 @@ class Game {
         } else {
             samePlayer = 0;
         }
-        }
+        
+    }
+    /** 
+     * Switches active player. 
+     */
+    switchPlayers(){
+        this.players = this.players.array.forEach(element => {
+            element.active = !element.active;
+        });
     }
 }
