@@ -86,11 +86,13 @@ class Game {
         const spacesBelow = allSpaces[spaceColumn].slice(spaceRow+1);
         let samePlayer = 0;
         const amountSpacesLEFT = allSpaces.length - spaceColumn + 1;
-        const amountSpacesRIGHT = spaceRow;
+        const amountSpacesRIGHT = spaceColumn;
 
         //Check for vertical win
         for(let i = 0; i < spacesBelow.length; i += 1) {
-            if(spacesBelow[spacesBelow.length-1 - i].owner === player){
+            if(spacesBelow[spacesBelow.length-1 - i].owner === null){
+                break;
+            } else if(spacesBelow[spacesBelow.length-1 - i].owner === player){
                 samePlayer += 1;
             } else {
                 samePlayer = 0;
@@ -98,31 +100,51 @@ class Game {
             } 
         }
 
+        if (samePlayer >= 3) {
+            this.gameOver(`${player.name} wins!`);
+        } else {
+            samePlayer = 0;
+        }
+
         //Check for diagonal win in top left and bottom right directions
         for(let i = 0; i < amountSpacesLEFT;i += 1) {
-            if(allSpaces[spaceColumn-1-i][spaceRow+1+i].owner === player){
-                samePlayer += 1;
-            } else {
-                break;
-            } 
+            if(spaceColumn === 0){break}
+            if(allSpaces[spaceColumn-1-i][spaceRow-1-i]){
+                if(allSpaces[spaceColumn-1-i][spaceRow-1-i].owner === player){
+                    samePlayer += 1;
+                } else {
+                    break;
+                } } else {
+                    break;
+                }
         }
 
         for(let i = 0; i < amountSpacesRIGHT;i += 1) {
-            if(allSpaces[spaceColumn+1+i][spaceRow-1-i].owner === player){
-                samePlayer += 1;
-            } else {
-                break;
-            } 
+            if(spaceColumn+1 >= allSpaces.length){break}
+            if(allSpaces[spaceColumn+1+i][spaceRow-1-i].owner){
+                if(allSpaces[spaceColumn+1+i][spaceRow-1-i].owner === null){
+                    break;
+                } else if(allSpaces[spaceColumn+1+i][spaceRow-1-i].owner === player){
+                    samePlayer += 1;
+                } else {
+                    break;
+                }} else{
+                    break;
+                }
         }
 
         if (samePlayer >= 3) {
-            alert(`${player.name} wins!`)
+            this.gameOver(`${player.name} wins!`);
         } else {
             samePlayer = 0;
         }
 
         //Check for diagonal win in top right and bottom left directions
         for(let i = 0; i < amountSpacesLEFT;i += 1) {
+            if(spaceColumn === 0){break}
+            if(allSpaces[spaceColumn-1-i][spaceRow-1-i].owner === null){
+                break;
+            }
             if(allSpaces[spaceColumn-1-i][spaceRow-1-i].owner === player){
                 samePlayer += 1;
             } else {
@@ -131,21 +153,32 @@ class Game {
         }
 
         for(let i = 0; i < amountSpacesRIGHT;i += 1) {
-            if(allSpaces[spaceColumn+1+i][spaceRow+1+i].owner === player){
-                samePlayer += 1;
-            } else {
-                break;
-            } 
+            if(spaceColumn+1 >= allSpaces.length){break}
+            if(allSpaces[spaceColumn+1+i][spaceRow+1+i]){
+                if(allSpaces[spaceColumn+1+i][spaceRow+1+i].owner === null){
+                    break;
+                }
+                if(allSpaces[spaceColumn+1+i][spaceRow+1+i].owner === player){
+                    samePlayer += 1;
+                } else {
+                    break;
+                }} else {
+                    break;
+                } 
         }
 
         if (samePlayer >= 3) {
-            alert(`${player.name} wins!`)
+            this.gameOver(`${player.name} wins!`);
         } else {
             samePlayer = 0;
         }
 
         //Checks for horizontal
         for(let i = 0; i < amountSpacesLEFT;i += 1) {
+            if(spaceColumn === 0){break}
+            if(allSpaces[spaceColumn-1-i][spaceRow].owner === null){
+                break;
+            }
             if(allSpaces[spaceColumn-1-i][spaceRow].owner === player){
                 samePlayer += 1;
             } else {
@@ -154,6 +187,10 @@ class Game {
         }
 
         for(let i = 0; i < amountSpacesRIGHT;i += 1) {
+            if(spaceColumn+1 >= allSpaces.length){break}
+            if(allSpaces[spaceColumn+1+i][spaceRow].owner === null){
+                break
+            }
             if(allSpaces[spaceColumn+1+i][spaceRow].owner === player){
                 samePlayer += 1;
             } else {
@@ -162,7 +199,7 @@ class Game {
         }
 
         if (samePlayer >= 3) {
-            alert(`${player.name} wins!`)
+            this.gameOver(`${player.name} wins!`);
         } else {
             samePlayer = 0;
         }
@@ -172,8 +209,20 @@ class Game {
      * Switches active player. 
      */
     switchPlayers(){
-        this.players = this.players.array.forEach(element => {
-            element.active = !element.active;
-        });
+        this.players.array.forEach(element => element.active = !element.active);
+    }
+
+    /** 
+     * Displays game over message.
+     * @param {string} message - Game over message.      
+     */
+    gameOver(message){
+        $("#game-over")
+            .show()
+            .textContent = message;
+    }
+
+    updateGameState() {
+        
     }
 }
