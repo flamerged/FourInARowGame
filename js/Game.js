@@ -12,8 +12,8 @@ class Game {
 
     createPlayers(){
         const players = [];
-        players.push(new Player("Player 1", 1,"#e15258", true));
-        players.push(new Player("Player 2", 2, "#e59a13", 2));
+        players.push(new Player("Player 1", 1, "#e15258", true));
+        players.push(new Player("Player 2", 2, "#e59a13", false));
         return players;
     }
 
@@ -60,18 +60,25 @@ class Game {
     and pases it together with the reset function to the drop method of the token.
     */
     playToken() {
-        const tokenColumn = this.activePlayer.activeToken.columnLocation;
-        const spaces = this.board.spaces[tokenColumn];
-        const emptySpaces = spaces.filter(space => space.token === null);
-        console.log(emptySpaces);
-
-        if(emptySpaces){
-            this.ready = false;
-            this.activePlayer.activeToken.drop(emptySpaces.slice(-1)[0], () => console.log("No reset function yet"));
-            this.checkForWin(this.board.spaces,emptySpaces.slice(-1)[0]);
-        } else {
-            alert("Column is full");
+        let spaces = this.board.spaces;
+        let activeToken = this.activePlayer.activeToken;
+        let targetColumn = spaces[activeToken.columnLocation];
+        let targetSpace = null;
+    
+        for (let space of targetColumn) {
+            if (space.token === null) {
+                targetSpace = space;
+            }
         }
+    
+        if (targetSpace !== null) {
+            const game = this;
+            game.ready = false;
+    
+            activeToken.drop(targetSpace, function(){
+                game.updateGameState(activeToken, targetSpace);           
+            });  
+        }              
     }   
 
     /**
@@ -79,14 +86,14 @@ class Game {
      * @param {Array} allSpaces - Contains the two dimensional array of alls spaces of the board
      * @param {Object} space - contains the space of the last played token
      */
-    checkForWin(allSpaces, space) {
+    /* checkForWin(allSpaces, space) {
         const spaceColumn = space.x;
         const spaceRow = space.y;
         const player = space.owner;
         const spacesBelow = allSpaces[spaceColumn].slice(spaceRow+1);
         let samePlayer = 0;
-        const amountSpacesLEFT = allSpaces.length - spaceColumn + 1;
-        const amountSpacesRIGHT = spaceColumn;
+        const amountSpacesLEFT = spaceColumn;
+        const amountSpacesRIGHT = allSpaces.length - 1 - spaceColumn;
 
         //Check for vertical win
         for(let i = 0; i < spacesBelow.length; i += 1) {
@@ -101,7 +108,7 @@ class Game {
         }
 
         if (samePlayer >= 3) {
-            this.gameOver(`${player.name} wins!`);
+            return true;
         } else {
             samePlayer = 0;
         }
@@ -134,7 +141,7 @@ class Game {
         }
 
         if (samePlayer >= 3) {
-            this.gameOver(`${player.name} wins!`);
+            return true;
         } else {
             samePlayer = 0;
         }
@@ -167,8 +174,8 @@ class Game {
                 } 
         }
 
-        if (samePlayer >= 3) {
-            this.gameOver(`${player.name} wins!`);
+        if (samePlayer >= 3) {
+            return true;
         } else {
             samePlayer = 0;
         }
@@ -198,18 +205,77 @@ class Game {
             } 
         }
 
-        if (samePlayer >= 3) {
-            this.gameOver(`${player.name} wins!`);
+        if (samePlayer >= 3) {
+            return true;
         } else {
             samePlayer = 0;
         }
-        
+        return false;
+    } */
+    checkForWin(target){
+    	const owner = target.token.owner;
+    	let win = false;
+		console.log('checkforwin called');
+    	// vertical
+    	for (let x = 0; x < this.board.columns; x++ ){
+            for (let y = 0; y < this.board.rows - 3; y++){
+				console.log(x,y);
+				console.log(y+1);
+				console.log(y+2);
+				console.log(y+3);
+                if (this.board.spaces[x][y].owner === owner && 
+    				this.board.spaces[x][y+1].owner === owner && 
+    				this.board.spaces[x][y+2].owner === owner && 
+    				this.board.spaces[x][y+3].owner === owner) {
+                    	win = true;
+						console.log(win);
+                }           
+            }
+        }
+	
+    	// horizontal
+    	for (let x = 0; x < this.board.columns - 3; x++ ){
+            for (let y = 0; y < this.board.rows; y++){
+                if (this.board.spaces[x][y].owner === owner && 
+    				this.board.spaces[x+1][y].owner === owner && 
+    				this.board.spaces[x+2][y].owner === owner && 
+    				this.board.spaces[x+3][y].owner === owner) {
+                    	win = true;
+                }           
+            }
+        }
+		
+    	// diagonal
+    	for (let x = 3; x < this.board.columns; x++ ){
+            for (let y = 0; y < this.board.rows - 3; y++){
+                if (this.board.spaces[x][y].owner === owner && 
+    				this.board.spaces[x-1][y+1].owner === owner && 
+    				this.board.spaces[x-2][y+2].owner === owner && 
+    				this.board.spaces[x-3][y+3].owner === owner) {
+                    	win = true;
+                }           
+            }
+        }
+	
+    	// diagonal
+    	for (let x = 3; x < this.board.columns; x++ ){
+            for (let y = 3; y < this.board.rows; y++){
+                if (this.board.spaces[x][y].owner === owner && 
+    				this.board.spaces[x-1][y-1].owner === owner && 
+    				this.board.spaces[x-2][y-2].owner === owner && 
+    				this.board.spaces[x-3][y-3].owner === owner) {
+                    	win = true;
+                }           
+            }
+        }
+	
+    	return win;
     }
     /** 
      * Switches active player. 
      */
     switchPlayers(){
-        this.players.array.forEach(element => element.active = !element.active);
+        this.players.forEach(element => element.active = !element.active);
     }
 
     /** 
@@ -221,8 +287,27 @@ class Game {
             .show()
             .textContent = message;
     }
+    /** 
+     * Updates game state after token is dropped. 
+     * @param   {Object}  token  -  The token that's being dropped.
+     * @param   {Object}  target -  Targeted space for dropped token.
+     */
+    updateGameState(token, target) {
+        target.mark(token);
 
-    updateGameState() {
-        
+        if (!this.checkForWin(target)) {
+            console.log('no win');
+			this.switchPlayers();
+            
+            if (this.activePlayer.checkTokens()) {
+                this.activePlayer.activeToken.drawHTMLToken();
+                this.ready = true;
+            } else {
+                this.gameOver('No more tokens');
+            }
+        } else {
+			console.log('win');
+            this.gameOver(`${target.owner.name} wins!`)
+        }			
     }
 }

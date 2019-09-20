@@ -26,7 +26,7 @@ class Token {
      */
 
     get htmlToken() {
-        return document.getElementById(`${this.id}`)
+        return document.getElementById(this.id)
     }
 
     /* 
@@ -71,7 +71,7 @@ class Token {
      */
     drop(target, reset) {
         this.dropped = true;
-        target.mark(this);
+        
 
         $(this.htmlToken).animate({
             top: (target.y * target.diameter)
